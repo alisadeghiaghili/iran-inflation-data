@@ -27,7 +27,7 @@ Python pipeline to extract, process, and export Iran's monthly and yearly inflat
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/iran-inflation-data.git
+git clone https://github.com/alisadeghiaghili/iran-inflation-data.git
 cd iran-inflation-data
 
 # Create virtual environment
