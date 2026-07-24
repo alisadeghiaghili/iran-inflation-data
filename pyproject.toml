@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "iran-inflation-data"
+version = "1.0.0"
+description = "Python pipeline to extract and export Iran inflation data"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Ali Sadeghi"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "requests>=2.28.0",
+    "pandas>=1.5.0",
+    "openpyxl>=3.0.10",
+    "xlsxwriter>=3.0.0",
+    "sqlalchemy>=1.4.0",
+    "pyodbc>=4.0.35",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0",
+]
+
+[project.optional-dependencies]
+worldbank = ["wbgapi>=1.0.14"]
+imf = ["sdmx1>=2.22.0"]
+cbi = ["playwright>=1.40.0"]
+all = ["wbgapi>=1.0.14", "sdmx1>=2.22.0", "playwright>=1.40.0"]
+dev = ["pytest>=7.0", "black", "flake8", "mypy"]
+
+[project.urls]
+Homepage = "https://github.com/YOUR_USERNAME/iran-inflation-data"
+Repository = "https://github.com/YOUR_USERNAME/iran-inflation-data"
+Issues = "https://github.com/YOUR_USERNAME/iran-inflation-data/issues"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true

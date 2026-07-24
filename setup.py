@@ -1,0 +1,40 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="iran-inflation-data",
+    version="1.0.0",
+    author="Ali Sadeghi",
+    description="Python pipeline to extract and export Iran inflation data",
+    long_description=open("README.md", encoding="utf-8").read(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/YOUR_USERNAME/iran-inflation-data",
+    packages=find_packages(),
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Topic :: Scientific/Engineering :: Information Analysis",
+    ],
+    python_requires=">=3.10",
+    install_requires=[
+        "requests>=2.28.0",
+        "pandas>=1.5.0",
+        "openpyxl>=3.0.10",
+        "xlsxwriter>=3.0.0",
+        "sqlalchemy>=1.4.0",
+        "pyodbc>=4.0.35",
+        "beautifulsoup4>=4.12.0",
+        "lxml>=4.9.0",
+    ],
+    extras_require={
+        "worldbank": ["wbgapi>=1.0.14"],
+        "imf": ["sdmx1>=2.22.0"],
+        "cbi": ["playwright>=1.40.0"],
+        "all": ["wbgapi>=1.0.14", "sdmx1>=2.22.0", "playwright>=1.40.0"],
+    },
+)
