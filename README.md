@@ -1,21 +1,69 @@
 # iran-inflation-data
 
-Python pipeline to extract, process, and export Iran's monthly and yearly inflation data from World Bank, IMF, and Central Bank of Iran APIs to CSV, Excel, and SQL Server formats for prediction and analysis tasks.
+Python package to extract, process, and export Iran's monthly and yearly inflation data from World Bank, IMF, and Central Bank of Iran APIs to CSV, Excel, and SQL Server formats for prediction and analysis tasks.
 
-## Features
+## Installation
 
-- **Multi-source data collection**: World Bank API, IMF SDMX API, and Central Bank of Iran
-- **Flexible export**: CSV, Excel (.xlsx), and SQL Server (via SQLAlchemy)
-- **Retry logic**: Automatic retries with exponential backoff for API calls
-- **Graceful degradation**: Skips unavailable sources and continues with available data
+```bash
+# Basic install (World Bank data only)
+pip install iran-inflation-data
+
+# With Excel support
+pip install iran-inflation-data[excel]
+
+# With SQL Server support
+pip install iran-inflation-data[sql]
+
+# With all data sources
+pip install iran-inflation-data[all]
+
+# Development install
+pip install -e ".[all,dev]"
+```
+
+## Quick Start
+
+### As a CLI tool
+
+```bash
+# Fetch all data and export to all formats
+iran-inflation fetch
+
+# Fetch only World Bank data
+iran-inflation fetch --source worldbank
+
+# Export to specific format
+iran-inflation fetch --export csv,excel
+
+# List available indicators
+iran-inflation indicators
+
+# Generate SQL script
+iran-inflation generate-sql
+```
+
+### As a Python library
+
+```python
+from iran_inflation import fetch_world_bank, process_yearly, export_csv
+
+# Fetch data from World Bank
+yearly_data = fetch_world_bank()
+
+# Process into clean DataFrame
+yearly_df = process_yearly(yearly_data)
+
+# Export to CSV
+export_csv(None, yearly_df)
+```
 
 ## Data Sources
 
-| Source | Granularity | Coverage | Status |
-|--------|------------|----------|--------|
-| World Bank | Yearly | 1960-2025 | Working |
-| IMF | Monthly | 1990-2025 | Requires network access |
-| CBI | Monthly | Varies | Requires Playwright |
+| Source | Granularity | Coverage | Extra Install |
+|--------|------------|----------|---------------|
+| World Bank | Yearly | 1960-2025 | `pip install wbgapi` |
+| IMF | Monthly | 1990-2025 | `pip install sdmx1` |
+| CBI | Monthly | Varies | `pip install playwright && playwright install` |
 
 ## Available Indicators
 
@@ -23,77 +71,50 @@ Python pipeline to extract, process, and export Iran's monthly and yearly inflat
 - **Inflation YoY %** (Year-over-year inflation rate)
 - **Food Inflation %** (Food-specific inflation)
 
-## Installation
+## Output Files
 
-```bash
-# Clone the repository
-git clone https://github.com/alisadeghiaghili/iran-inflation-data.git
-cd iran-inflation-data
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# For CBI data (optional)
-pip install playwright
-playwright install
-```
-
-## Usage
-
-### Basic Usage
-
-```bash
-python main.py
-```
-
-### Output Files
-
-After running the pipeline, you'll find:
+After running the pipeline:
 
 - `data/processed/iran_inflation_yearly.csv` - Yearly data
 - `data/processed/iran_inflation_monthly.csv` - Monthly data (if available)
 - `data/processed/iran_inflation.xlsx` - Excel workbook with multiple sheets
 - `data/processed/iran_inflation.sql` - SQL Server script
 
-### Configuration
+## Configuration
 
-Edit `src/config.py` to configure:
+### SQL Server Connection
 
-```python
-# SQL Server connection
-SQL_SERVER_CONNECTION = "mssql+pyodbc://username:password@server/database?driver=ODBC+Driver+17+for+SQL+Server"
+Set the `IRAN_INFLATION_DB_URL` environment variable:
 
-# Or set environment variable
-export IRAN_INFLATION_DB_URL="mssql+pyodbc://..."
+```bash
+# Windows
+set IRAN_INFLATION_DB_URL=mssql+pyodbc://username:password@server/database?driver=ODBC+Driver+17+for+SQL+Server
+
+# Linux/Mac
+export IRAN_INFLATION_DB_URL="mssql+pyodbc://username:password@server/database?driver=ODBC+Driver+17+for+SQL+Server"
 ```
+
+Or edit `src/config.py` directly.
 
 ## Project Structure
 
 ```
-iran-inflation-data/
-├── src/
-│   ├── fetchers/
-│   │   ├── world_bank.py    # World Bank API fetcher
-│   │   ├── imf.py           # IMF SDMX API fetcher
-│   │   └── cbi.py           # Central Bank of Iran scraper
-│   ├── processors/
-│   │   └── cleaner.py       # Data cleaning & merging
-│   ├── exporters/
-│   │   ├── csv_exporter.py  # CSV export
-│   │   ├── excel_exporter.py # Excel export
-│   │   ├── sql_exporter.py  # SQL Server export
-│   │   └── sql_script_exporter.py # SQL script generator
-│   └── config.py            # Configuration
-├── data/
-│   ├── raw/                 # Raw fetched data
-│   └── processed/           # Cleaned exports
-├── main.py                  # Main pipeline entry point
-├── requirements.txt         # Python dependencies
-└── README.md
+iran_inflation/
+├── __init__.py          # Package exports
+├── __main__.py          # python -m iran_inflation
+├── cli.py               # Click CLI
+├── config.py            # Configuration
+├── fetchers/
+│   ├── world_bank.py    # World Bank API
+│   ├── imf.py           # IMF SDMX API
+│   └── cbi.py           # Central Bank of Iran
+├── processors/
+│   └── cleaner.py       # Data cleaning
+└── exporters/
+    ├── csv_exporter.py
+    ├── excel_exporter.py
+    ├── sql_exporter.py
+    └── sql_script_exporter.py
 ```
 
 ## Data Schema
@@ -121,15 +142,15 @@ iran-inflation-data/
 ## Requirements
 
 - Python 3.10+
-- See `requirements.txt` for dependencies
+- See `requirements.txt` or `pyproject.toml` for dependencies
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Acknowledgments
 
